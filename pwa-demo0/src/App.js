@@ -37,6 +37,7 @@ class MyDiv extends React.Component {
     render() { 
         return (
         <div>
+            一斤多少钱计算器
             <div>
                 价格(元)： 
                 <input type="number" onChange={this.OnInpPv.bind(this)}/>
