@@ -7,7 +7,7 @@ import './index.css';
 // 最简单的React组件类
 class Square extends React.Component {  // 定义一个自己的类，继承React的组件类
     render() {  // 写一个render方法, 表示他是怎么被渲染的
-      return (  // 返回一个jsx   jsx被括号包裹 里面可以直接写HTML标签
+      return (  // return一个对象，这个对象是一个jsx  jsx被括号包裹 里面可以直接写HTML标签
         <button className="square">
           {this.props.val1}
         </button>
@@ -117,3 +117,24 @@ function Square(props) {
       </button>
     );
   }
+
+
+
+// 坑
+hanldClick = () => {
+    // 假如设置之后马上读取，这个值还是旧的。 初始counter=0
+    this.setState({
+       counter: this.state.counter + 1
+    });
+    console.log(this.state.counter); // 0
+ };
+
+// 要改为
+hanldClick = () => {
+    // 初始counter=0
+    this.setState({
+       counter: this.state.counter + 1
+    },()=>{
+       console.log(this.state.counter); // 1
+    });
+ };
