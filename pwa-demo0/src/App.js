@@ -125,21 +125,19 @@ const App = () => {
     // by the button
 
     const onClickReset = () => {
-
         clearTimer(getDeadTime());
-
     }
 
+    const MyDiv = (
+        <div className="test">112233</div>
+    )
+
     return (
-
         <div className="App">
-
             <h2>{timer}</h2>
-
             <button onClick={onClickReset}>Reset</button>
-
+            <div>{MyDiv}</div>
         </div>
-
     )
 
 }
