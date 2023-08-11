@@ -3,9 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 const App = () => {
 
     // We need ref in this, because we are dealing
-
     // with JS setInterval to keep track of it and
-
     // stop it when needed
 
     const Ref = useRef(null);
@@ -128,15 +126,10 @@ const App = () => {
         clearTimer(getDeadTime());
     }
 
-    const MyDiv = (
-        <div className="test">112233</div>
-    )
-
     return (
         <div className="App">
             <h2>{timer}</h2>
             <button onClick={onClickReset}>Reset</button>
-            <div>{MyDiv}</div>
         </div>
     )
 
