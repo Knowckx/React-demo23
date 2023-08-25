@@ -1,14 +1,13 @@
 - [useState()：用变量记录状态](#usestate用变量记录状态)
+- [useRef 相当于类成员变量](#useref-相当于类成员变量)
 - [useContext()：共享状态钩子](#usecontext共享状态钩子)
 - [useReducer()：action 钩子](#usereduceraction-钩子)
-- [useRef 保持一个对象的引用](#useref-保持一个对象的引用)
 
 
 
 ## useState()：用变量记录状态
 useState()用于为函数组件引入状态（state）。
 纯函数不能有状态，所以把状态放在钩子里面。  
-相当于类的变量吧。
 
 ```javascript
 const [num,setNum] = useState<number>(1)
@@ -20,6 +19,87 @@ const [num,setNum] = useState<number>(1)
 ```javascript
 <div onClick= {()=>setNum(10)}>
 ```
+
+注意点：
+这个值变化，会触发刷新渲染
+异步更新值，如果setState后立即获取state的值，此时state尚未更新，因此为旧值。
+    不要用setCount(count-1)  因为这个count值本身不是最新的
+
+想法：
+    他的设计有缺陷，不能同时做到修改一个值，这个值是最新的，同时可以刷新页面。
+最佳实践：
+    先声明一个state, 通过setState来改值，这样就能让页面render()。
+    实际显示的值是ref.current 因为这个值是一个同步的值
+
+## useRef 相当于类成员变量
+
+useRef 返回一个ref对象， 这个ref对象只有一个current属性。
+这个ref对象在组件的整个生命周期内保持不变
+
+```javascript
+import React, { useRef } from "react";
+export default function App() {
+  const r = useRef(0); // r的初始值是0
+  console.log(r);
+  const add = () => {
+    r.current += 1;
+    console.log(`r.current:${r.current}`);
+  };
+  return (
+    <div className="App">
+      <h1>r的current:{r.current}</h1>
+      <button onClick={add}>点击+1</button>
+    </div>
+  );
+}
+```
+
+点击按钮，让current+1, 新的current的值已经变成了1， 但是页面没有主动渲染
+
+
+注意点：
+这个值变化，不会触发刷新渲染
+同步更新值，修改后可以立即获取到最新的值
+
+
+
+
+加强版：
+
+```javascript
+import React, { useEffect, useRef, useState } from "react";
+export default function App() {
+  const r = useRef(0);
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    r.current += 1;
+    if (r.current > 1) {
+      console.log("r.current:" + r.current);
+      console.log("n:" + n);
+    }
+  });
+  return (
+    <div className="App">
+      <h1>n:{n}</h1>
+      <h1>r.current{r.current}</h1>
+      <button
+        onClick={() => {
+          setN(n + 1);
+        }}
+      >
+        {" "}
+        +1
+      </button>
+    </div>
+  );
+}
+```
+
+
+
+
+
+
 
 
 ## useContext()：共享状态钩子
@@ -107,66 +187,4 @@ function App() {
   );
 }
 ```
-
-
-## useRef 保持一个对象的引用
-
-useRef 返回一个ref对象， 这个ref对象只有一个current属性。
-这个ref对象在组件的整个生命周期内保持不变
-
-```javascript
-import React, { useRef } from "react";
-export default function App() {
-  const r = useRef(0); // r的初始值是0
-  console.log(r);
-  const add = () => {
-    r.current += 1;
-    console.log(`r.current:${r.current}`);
-  };
-  return (
-    <div className="App">
-      <h1>r的current:{r.current}</h1>
-      <button onClick={add}>点击+1</button>
-    </div>
-  );
-}
-```
-
-点击按钮，让current+1, 新的current的值已经变成了1， 但是页面没有主动渲染
-useRef的值变化不会触发页面刷新
-
-加强版：
-
-```javascript
-import React, { useEffect, useRef, useState } from "react";
-export default function App() {
-  const r = useRef(0);
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    r.current += 1;
-    if (r.current > 1) {
-      console.log("r.current:" + r.current);
-      console.log("n:" + n);
-    }
-  });
-  return (
-    <div className="App">
-      <h1>n:{n}</h1>
-      <h1>r.current{r.current}</h1>
-      <button
-        onClick={() => {
-          setN(n + 1);
-        }}
-      >
-        {" "}
-        +1
-      </button>
-    </div>
-  );
-}
-```
-
-
-
-
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import MyDiv from './App';
+// import MyDiv from './App';
+import MyDiv from './AppAsu';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 // import register from "./registerServiceWorker";
